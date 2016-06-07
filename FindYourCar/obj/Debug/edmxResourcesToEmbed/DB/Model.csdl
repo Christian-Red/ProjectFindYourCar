@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PassWord" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="AppearedAbility" Type="Double" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="NumberOfPost" Type="Int32" />
+    <Property Name="AccountType" Type="Int32" />
+    <Property Name="PostLimitation" Type="Int32" />
+    <NavigationProperty Name="Type_Of_Account" Relationship="Self.FK_Account_Type_Of_Account" FromRole="Account" ToRole="Type_Of_Account" />
+    <NavigationProperty Name="Members" Relationship="Self.FK_Member_Account" FromRole="Account" ToRole="Member" />
+  </EntityType>
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="CarID" />
+    </Key>
+    <Property Name="CarID" Type="Int32" Nullable="false" />
+    <Property Name="CarName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BrandType" Type="Int32" />
+    <Property Name="ColorID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="isUsed" Type="Boolean" />
+    <Property Name="Price" Type="Int32" />
+    <NavigationProperty Name="TypeOfBrand" Relationship="Self.FK_Car_TypeOfBrand" FromRole="Car" ToRole="TypeOfBrand" />
+    <NavigationProperty Name="Posts" Relationship="Self.FK_Post_Car" FromRole="Car" ToRole="Post" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Province" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Members" Relationship="Self.FK_Member_Location" FromRole="Location" ToRole="Member" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="MemID" />
+    </Key>
+    <Property Name="MemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="LocationID" Type="Int32" />
+    <Property Name="Phone" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+    <Property Name="UserAccount" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="ProfileImg" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_Member_Account" FromRole="Member" ToRole="Account" />
+    <NavigationProperty Name="Location" Relationship="Self.FK_Member_Location" FromRole="Member" ToRole="Location" />
+    <NavigationProperty Name="Posts" Relationship="Self.FK_Post_Member" FromRole="Member" ToRole="Post" />
+  </EntityType>
+  <EntityType Name="Post">
+    <Key>
+      <PropertyRef Name="PostID" />
+    </Key>
+    <Property Name="PostID" Type="Int32" Nullable="false" />
+    <Property Name="CarID" Type="Int32" />
+    <Property Name="PostContent" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DateofPost" Type="DateTime" Precision="3" />
+    <Property Name="isSold" Type="Boolean" />
+    <Property Name="NumberofViewer" Type="Int32" />
+    <Property Name="PostType" Type="Int32" />
+    <Property Name="Owner" Type="Int32" />
+    <Property Name="Photo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Car" Relationship="Self.FK_Post_Car" FromRole="Post" ToRole="Car" />
+    <NavigationProperty Name="Member" Relationship="Self.FK_Post_Member" FromRole="Post" ToRole="Member" />
+    <NavigationProperty Name="TypeOfPost" Relationship="Self.FK_Post_TypeOfPost" FromRole="Post" ToRole="TypeOfPost" />
+  </EntityType>
+  <EntityType Name="Type_Of_Account">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Accounts" Relationship="Self.FK_Account_Type_Of_Account" FromRole="Type_Of_Account" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="TypeOfBrand">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Cars" Relationship="Self.FK_Car_TypeOfBrand" FromRole="TypeOfBrand" ToRole="Car" />
+  </EntityType>
+  <EntityType Name="TypeOfPost">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Posts" Relationship="Self.FK_Post_TypeOfPost" FromRole="TypeOfPost" ToRole="Post" />
+  </EntityType>
+  <Association Name="FK_Account_Type_Of_Account">
+    <End Role="Type_Of_Account" Type="Self.Type_Of_Account" Multiplicity="0..1" />
+    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type_Of_Account">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="AccountType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Member_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Member" Type="Self.Member" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserName" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="UserAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Car_TypeOfBrand">
+    <End Role="TypeOfBrand" Type="Self.TypeOfBrand" Multiplicity="0..1" />
+    <End Role="Car" Type="Self.Car" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeOfBrand">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Car">
+        <PropertyRef Name="BrandType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Post_Car">
+    <End Role="Car" Type="Self.Car" Multiplicity="0..1" />
+    <End Role="Post" Type="Self.Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Car">
+        <PropertyRef Name="CarID" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="CarID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Member_Location">
+    <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
+    <End Role="Member" Type="Self.Member" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Location">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="LocationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Post_Member">
+    <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+    <End Role="Post" Type="Self.Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="MemID" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="Owner" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Post_TypeOfPost">
+    <End Role="TypeOfPost" Type="Self.TypeOfPost" Multiplicity="0..1" />
+    <End Role="Post" Type="Self.Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeOfPost">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="PostType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarManagementEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="Self.Account" />
+    <EntitySet Name="Cars" EntityType="Self.Car" />
+    <EntitySet Name="Locations" EntityType="Self.Location" />
+    <EntitySet Name="Members" EntityType="Self.Member" />
+    <EntitySet Name="Posts" EntityType="Self.Post" />
+    <EntitySet Name="Type_Of_Accounts" EntityType="Self.Type_Of_Account" />
+    <EntitySet Name="TypeOfBrands" EntityType="Self.TypeOfBrand" />
+    <EntitySet Name="TypeOfPosts" EntityType="Self.TypeOfPost" />
+    <AssociationSet Name="FK_Account_Type_Of_Account" Association="Self.FK_Account_Type_Of_Account">
+      <End Role="Type_Of_Account" EntitySet="Type_Of_Accounts" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Member_Account" Association="Self.FK_Member_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Member" EntitySet="Members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Car_TypeOfBrand" Association="Self.FK_Car_TypeOfBrand">
+      <End Role="TypeOfBrand" EntitySet="TypeOfBrands" />
+      <End Role="Car" EntitySet="Cars" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Post_Car" Association="Self.FK_Post_Car">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Member_Location" Association="Self.FK_Member_Location">
+      <End Role="Location" EntitySet="Locations" />
+      <End Role="Member" EntitySet="Members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Post_Member" Association="Self.FK_Post_Member">
+      <End Role="Member" EntitySet="Members" />
+      <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Post_TypeOfPost" Association="Self.FK_Post_TypeOfPost">
+      <End Role="TypeOfPost" EntitySet="TypeOfPosts" />
+      <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,60 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="FindYourCar.MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Find Your Car</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="jumbotron" style="background-image: url(../Image/unnamed.jpg)">
+        <div class="container text-center" style="color:#ffe6e6">
+            
+            <h1><strong>Car Store</strong> </h1>
+            <p>Mission, Vission & Values</p>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-inverse">
+        <asp:ContentPlaceHolder ID="navigator" runat="server"></asp:ContentPlaceHolder>
+    </nav>
+
+    <div class="container">
+        <asp:ContentPlaceHolder ID="mainContent" runat="server"></asp:ContentPlaceHolder>
+    </div>
+
+    <footer class="container-fluid well">   
+       <div class="row content">
+         <div class="col-sm-4 sidenav text-center">
+         <address>
+             <strong>University Of Information Technology</strong><br/>
+                    Linh Trung, Thu Duc district<br/>
+                     AEP08, 13520933-1352484<br/>
+             <abbr title="Phone">P:</abbr> (123) 456-7890
+        </address>
+
+     </div>
+         <div class="col-sm-4 text-center"> 
+            <strong>Find Your Car Project</strong><br />
+            <asp:Label ID="footer" runat="server"> <em> W3School.com copyright.</em> </asp:Label>
+     </div>
+         <div class="col-sm-4 sidenav text-center">
+         <address>
+            <strong>Full Name</strong><br/>
+            <a>13520933@gm.uit.edu.vn</a> <br />
+            <a>13520484@gm.uit.edu.vn</a>
+         </address>
+     </div>
+    </div>
+    </footer>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CarManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PassWord" Type="nvarchar" MaxLength="400" />
+          <Property Name="AppearedAbility" Type="float" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="NumberOfPost" Type="int" />
+          <Property Name="AccountType" Type="int" />
+          <Property Name="PostLimitation" Type="int" />
+        </EntityType>
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="CarID" />
+          </Key>
+          <Property Name="CarID" Type="int" Nullable="false" />
+          <Property Name="CarName" Type="varchar" MaxLength="50" />
+          <Property Name="BrandType" Type="int" />
+          <Property Name="ColorID" Type="varchar" MaxLength="50" />
+          <Property Name="isUsed" Type="bit" />
+          <Property Name="Price" Type="int" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Province" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemID" />
+          </Key>
+          <Property Name="MemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="30" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="30" />
+          <Property Name="Birthday" Type="date" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Phone" Type="nchar" MaxLength="11" />
+          <Property Name="UserAccount" Type="varchar" MaxLength="30" />
+          <Property Name="Email" Type="varchar" MaxLength="30" />
+          <Property Name="ProfileImg" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="int" Nullable="false" />
+          <Property Name="CarID" Type="int" />
+          <Property Name="PostContent" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateofPost" Type="datetime" />
+          <Property Name="isSold" Type="bit" />
+          <Property Name="NumberofViewer" Type="int" />
+          <Property Name="PostType" Type="int" />
+          <Property Name="Owner" Type="int" />
+          <Property Name="Photo" Type="varchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Type Of Account">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="TypeOfBrand">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TypeOfPost">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Account_Type Of Account">
+          <End Role="Type Of Account" Type="Self.Type Of Account" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type Of Account">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="AccountType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Car_TypeOfBrand">
+          <End Role="TypeOfBrand" Type="Self.TypeOfBrand" Multiplicity="0..1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeOfBrand">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="BrandType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="UserName" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="UserAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_TypeOfPost">
+          <End Role="TypeOfPost" Type="Self.TypeOfPost" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeOfPost">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="PostType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarManagementModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type Of Account" EntityType="Self.Type Of Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeOfBrand" EntityType="Self.TypeOfBrand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeOfPost" EntityType="Self.TypeOfPost" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Account_Type Of Account" Association="Self.FK_Account_Type Of Account">
+            <End Role="Type Of Account" EntitySet="Type Of Account" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Car_TypeOfBrand" Association="Self.FK_Car_TypeOfBrand">
+            <End Role="TypeOfBrand" EntitySet="TypeOfBrand" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_Account" Association="Self.FK_Member_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_Location" Association="Self.FK_Member_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Car" Association="Self.FK_Post_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Member" Association="Self.FK_Post_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_TypeOfPost" Association="Self.FK_Post_TypeOfPost">
+            <End Role="TypeOfPost" EntitySet="TypeOfPost" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PassWord" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="AppearedAbility" Type="Double" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="NumberOfPost" Type="Int32" />
+          <Property Name="AccountType" Type="Int32" />
+          <Property Name="PostLimitation" Type="Int32" />
+          <NavigationProperty Name="Type_Of_Account" Relationship="Self.FK_Account_Type_Of_Account" FromRole="Account" ToRole="Type_Of_Account" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Member_Account" FromRole="Account" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="CarID" />
+          </Key>
+          <Property Name="CarID" Type="Int32" Nullable="false" />
+          <Property Name="CarName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BrandType" Type="Int32" />
+          <Property Name="ColorID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="isUsed" Type="Boolean" />
+          <Property Name="Price" Type="Int32" />
+          <NavigationProperty Name="TypeOfBrand" Relationship="Self.FK_Car_TypeOfBrand" FromRole="Car" ToRole="TypeOfBrand" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK_Post_Car" FromRole="Car" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Province" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Member_Location" FromRole="Location" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemID" />
+          </Key>
+          <Property Name="MemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="0" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Phone" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="UserAccount" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ProfileImg" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Member_Account" FromRole="Member" ToRole="Account" />
+          <NavigationProperty Name="Location" Relationship="Self.FK_Member_Location" FromRole="Member" ToRole="Location" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK_Post_Member" FromRole="Member" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="Int32" Nullable="false" />
+          <Property Name="CarID" Type="Int32" />
+          <Property Name="PostContent" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateofPost" Type="DateTime" Precision="3" />
+          <Property Name="isSold" Type="Boolean" />
+          <Property Name="NumberofViewer" Type="Int32" />
+          <Property Name="PostType" Type="Int32" />
+          <Property Name="Owner" Type="Int32" />
+          <Property Name="Photo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Car" Relationship="Self.FK_Post_Car" FromRole="Post" ToRole="Car" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_Post_Member" FromRole="Post" ToRole="Member" />
+          <NavigationProperty Name="TypeOfPost" Relationship="Self.FK_Post_TypeOfPost" FromRole="Post" ToRole="TypeOfPost" />
+        </EntityType>
+        <EntityType Name="Type_Of_Account">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK_Account_Type_Of_Account" FromRole="Type_Of_Account" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="TypeOfBrand">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cars" Relationship="Self.FK_Car_TypeOfBrand" FromRole="TypeOfBrand" ToRole="Car" />
+        </EntityType>
+        <EntityType Name="TypeOfPost">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK_Post_TypeOfPost" FromRole="TypeOfPost" ToRole="Post" />
+        </EntityType>
+        <Association Name="FK_Account_Type_Of_Account">
+          <End Role="Type_Of_Account" Type="Self.Type_Of_Account" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type_Of_Account">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="AccountType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="UserName" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="UserAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Car_TypeOfBrand">
+          <End Role="TypeOfBrand" Type="Self.TypeOfBrand" Multiplicity="0..1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeOfBrand">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="BrandType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_TypeOfPost">
+          <End Role="TypeOfPost" Type="Self.TypeOfPost" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeOfPost">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="PostType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Cars" EntityType="Self.Car" />
+          <EntitySet Name="Locations" EntityType="Self.Location" />
+          <EntitySet Name="Members" EntityType="Self.Member" />
+          <EntitySet Name="Posts" EntityType="Self.Post" />
+          <EntitySet Name="Type_Of_Accounts" EntityType="Self.Type_Of_Account" />
+          <EntitySet Name="TypeOfBrands" EntityType="Self.TypeOfBrand" />
+          <EntitySet Name="TypeOfPosts" EntityType="Self.TypeOfPost" />
+          <AssociationSet Name="FK_Account_Type_Of_Account" Association="Self.FK_Account_Type_Of_Account">
+            <End Role="Type_Of_Account" EntitySet="Type_Of_Accounts" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_Account" Association="Self.FK_Member_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Car_TypeOfBrand" Association="Self.FK_Car_TypeOfBrand">
+            <End Role="TypeOfBrand" EntitySet="TypeOfBrands" />
+            <End Role="Car" EntitySet="Cars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Car" Association="Self.FK_Post_Car">
+            <End Role="Car" EntitySet="Cars" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_Location" Association="Self.FK_Member_Location">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Member" Association="Self.FK_Post_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_TypeOfPost" Association="Self.FK_Post_TypeOfPost">
+            <End Role="TypeOfPost" EntitySet="TypeOfPosts" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarManagementModelStoreContainer" CdmEntityContainer="CarManagementEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="CarManagementModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="PassWord" ColumnName="PassWord" />
+                <ScalarProperty Name="AppearedAbility" ColumnName="AppearedAbility" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="NumberOfPost" ColumnName="NumberOfPost" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="PostLimitation" ColumnName="PostLimitation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cars">
+            <EntityTypeMapping TypeName="CarManagementModel.Car">
+              <MappingFragment StoreEntitySet="Car">
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+                <ScalarProperty Name="CarName" ColumnName="CarName" />
+                <ScalarProperty Name="BrandType" ColumnName="BrandType" />
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="isUsed" ColumnName="isUsed" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="CarManagementModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="CarManagementModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="MemID" ColumnName="MemID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="UserAccount" ColumnName="UserAccount" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ProfileImg" ColumnName="ProfileImg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="CarManagementModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="DateofPost" ColumnName="DateofPost" />
+                <ScalarProperty Name="isSold" ColumnName="isSold" />
+                <ScalarProperty Name="NumberofViewer" ColumnName="NumberofViewer" />
+                <ScalarProperty Name="PostType" ColumnName="PostType" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Type_Of_Accounts">
+            <EntityTypeMapping TypeName="CarManagementModel.Type_Of_Account">
+              <MappingFragment StoreEntitySet="Type Of Account">
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeOfBrands">
+            <EntityTypeMapping TypeName="CarManagementModel.TypeOfBrand">
+              <MappingFragment StoreEntitySet="TypeOfBrand">
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeOfPosts">
+            <EntityTypeMapping TypeName="CarManagementModel.TypeOfPost">
+              <MappingFragment StoreEntitySet="TypeOfPost">
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
